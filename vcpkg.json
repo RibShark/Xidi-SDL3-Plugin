@@ -1,0 +1,9 @@
+{
+  "name" : "xidi-sdl3-plugin",
+  "version-string" : "1.0.0",
+  "builtin-baseline" : "b5d1a94fb7f88fd835e360fd23a45a09ceedbf48",
+  "dependencies" : [ {
+    "name" : "sdl3",
+    "version>=" : "3.4.2#1"
+  } ]
+}
