@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 4.0)
-project(Xidi_SDL3_Plugin VERSION 1.0.0
+project(Xidi_SDL3_Plugin VERSION 1.0.1
         DESCRIPTION "A Xidi plugin to accept inputs from any controller supported by the SDL3 Gamepad API."
         LANGUAGES CXX)
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
