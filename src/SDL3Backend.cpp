@@ -46,12 +46,15 @@ namespace XidiSDL3Plugin
 
     bool SDL3Backend::SupportsControllerByGuidAndPath(const wchar_t* guidAndPath)
     {
+        if (guidAndPath == nullptr) return false;
+
         bool isGamepad = false;
 
         Uint16 vendorID;
         Uint16 productID;
 
-        if (swscanf_s(guidAndPath, LR"(\\?\hid#vid_%hx&pid_%hx%*s)", &vendorID, &productID) != 2)
+        if (const wchar_t* vidPid = wcsstr(guidAndPath, L"vid_"); vidPid != nullptr &&
+            swscanf_s(vidPid, L"vid_%hx&pid_%hx%*s", &vendorID, &productID) != 2)
             return false;
 
         for (int i = 0; i < gamepadCount; i++)
