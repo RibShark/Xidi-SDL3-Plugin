@@ -20,6 +20,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
         OUTPUT_NAME "SDL.XidiPlugin.${ARCHITECTURE}" CXX_STANDARD 23 CXX_EXTENSIONS OFF CXX_STANDARD_REQUIRED ON)
 
 find_package(SDL3 CONFIG REQUIRED)
-target_link_libraries(${PROJECT_NAME} PRIVATE SDL3::SDL3)
+target_link_libraries(${PROJECT_NAME} PRIVATE SDL3::SDL3 Hid)
 
 target_include_directories(${PROJECT_NAME} PRIVATE "include")

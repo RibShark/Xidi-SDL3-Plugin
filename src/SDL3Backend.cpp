@@ -1,5 +1,7 @@
 #include <vector>
 #include <SDL3/SDL.h>
+#include <Windows.h>
+#include <hidsdi.h>
 
 #include "SDL3Backend.h"
 
@@ -46,25 +48,23 @@ namespace XidiSDL3Plugin
 
     bool SDL3Backend::SupportsControllerByGuidAndPath(const wchar_t* guidAndPath)
     {
-        if (guidAndPath == nullptr) return false;
+        HANDLE hDevice = CreateFileW(guidAndPath, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE,
+            nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 
-        bool isGamepad = false;
-
-        Uint16 vendorID;
-        Uint16 productID;
-
-        if (const wchar_t* vidPid = wcsstr(guidAndPath, L"vid_"); vidPid != nullptr &&
-            swscanf_s(vidPid, L"vid_%hx&pid_%hx%*s", &vendorID, &productID) != 2)
+        if (hDevice == INVALID_HANDLE_VALUE)
             return false;
+
+        HIDD_ATTRIBUTES attributes = { .Size = sizeof(HIDD_ATTRIBUTES) };
+        HidD_GetAttributes(hDevice, &attributes);
 
         for (int i = 0; i < gamepadCount; i++)
         {
-            if (vendorID == SDL_GetGamepadVendorForID(gamepadIDs[i]) &&
-                productID == SDL_GetGamepadProductForID(gamepadIDs[i]))
-                isGamepad = true;
+            if (attributes.VendorID == SDL_GetGamepadVendorForID(gamepadIDs[i]) &&
+                attributes.ProductID == SDL_GetGamepadProductForID(gamepadIDs[i]))
+                return true;
         }
 
-        return isGamepad;
+        return false;
     }
 
     SPhysicalControllerCapabilities SDL3Backend::GetCapabilities()
